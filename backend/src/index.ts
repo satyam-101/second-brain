@@ -1,6 +1,14 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import {pool} from "./db/db";
+import authRoutes from "./routes/auth.routes"
+import noteRoutes from "./routes/note.routes"
+import searchRoutes from "./routes/search.routes";
+import chatRoutes from "./routes/chat.route";
+import { authMiddleware, AuthRequest } from "./middleware/auth.middleware";
+import { pineconeIndex } from "./services/ai/pinecone.service";
+import { generateEmbedding} from './services/ai/embed.service'
 
 dotenv.config();
 
@@ -14,6 +22,11 @@ app.get("/",(req,res)=>{
         message:"second brain api is running"
     });
 });
+
+app.use("/api/auth",authRoutes);
+app.use("/api/notes",noteRoutes)
+app.use("/api/search",searchRoutes);
+app.use("/api/chat", chatRoutes);
 
 const PORT = process.env.PORT || 5000;
 
